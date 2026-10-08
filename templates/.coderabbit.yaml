@@ -1,0 +1,18 @@
+# Optional CodeRabbit config. CodeRabbit works with zero config on the free tier;
+# drop this in a repo root only if you want to standardize review behavior.
+# Reference: https://docs.coderabbit.ai/reference/configuration
+language: en-US
+reviews:
+  profile: chill            # less nitpicky; use "assertive" for stricter
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - "!**/*.lock"
+    - "!**/dist/**"
+    - "!**/node_modules/**"
+chat:
+  auto_reply: true

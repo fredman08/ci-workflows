@@ -1,0 +1,26 @@
+name: Semgrep OSS
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: "Semgrep ruleset(s), e.g. 'auto', 'p/default', or 'p/default p/security-audit'"
+        type: string
+        default: "auto"
+      soft-fail:
+        description: "true = report findings but do NOT fail the build"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep scan
+        run: semgrep scan --config "${{ inputs.config }}" ${{ inputs.soft-fail && ' ' || '--error' }}
