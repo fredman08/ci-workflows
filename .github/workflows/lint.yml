@@ -1,0 +1,41 @@
+name: Lint
+on:
+  workflow_call:
+    inputs:
+      soft-fail:
+        description: "true = report issues but do NOT fail the build"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Detect and lint changed stacks
+        shell: bash
+        run: |
+          set -uo pipefail
+          status=0
+          if find . -path ./node_modules -prune -o -name '*.py' -print 2>/dev/null | grep -q .; then
+            echo "::group::Python (ruff)"
+            python -m pip install --quiet ruff
+            ruff check . || status=1
+            echo "::endgroup::"
+          fi
+          if [ -f package.json ]; then
+            echo "::group::Node (eslint + tsc)"
+            npm install --no-audit --no-fund --silent || true
+            npm run lint --if-present || status=1
+            if [ -f tsconfig.json ]; then npx --yes tsc --noEmit || status=1; fi
+            echo "::endgroup::"
+          fi
+          if [ "${{ inputs.soft-fail }}" = "true" ]; then exit 0; fi
+          exit "$status"
