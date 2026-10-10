@@ -1,0 +1,61 @@
+<svg viewBox="0 0 900 180" width="900" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One reusable workflow defined once, called by every repo">
+  <defs>
+    <linearGradient id="fbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c1a28"/>
+      <stop offset="1" stop-color="#0f2234"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="180" fill="url(#fbg)"/>
+
+  <g font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace">
+    <!-- connectors -->
+    <g stroke="#33495f" stroke-width="2" fill="none">
+      <line x1="300" y1="90" x2="690" y2="34"/>
+      <line x1="300" y1="90" x2="690" y2="71"/>
+      <line x1="300" y1="90" x2="690" y2="108"/>
+      <line x1="300" y1="90" x2="690" y2="145"/>
+    </g>
+
+    <!-- traveling pulses: define-once flows out to each repo -->
+    <g fill="#56c596">
+      <circle r="4.5"><animateMotion path="M300,90 L690,34" dur="2.4s" begin="0s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle>
+      <circle r="4.5"><animateMotion path="M300,90 L690,71" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="0.6s" repeatCount="indefinite"/></circle>
+      <circle r="4.5"><animateMotion path="M300,90 L690,108" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"/></circle>
+      <circle r="4.5"><animateMotion path="M300,90 L690,145" dur="2.4s" begin="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2.4s" begin="1.8s" repeatCount="indefinite"/></circle>
+    </g>
+
+    <!-- hub: the reusable workflow, defined once -->
+    <g>
+      <rect x="96" y="62" width="156" height="56" rx="12" fill="#12283a" stroke="#56c596" stroke-width="2.4"/>
+      <text x="174" y="88" text-anchor="middle" font-size="16" font-weight="700" fill="#eaf1f6">ci-workflows</text>
+      <text x="174" y="106" text-anchor="middle" font-size="11.5" fill="#7ad6ab">defined once</text>
+    </g>
+
+    <!-- repo nodes -->
+    <g>
+      <g>
+        <circle cx="708" cy="34" r="15" fill="#12283a" stroke="#4a7bb0" stroke-width="2.2"/>
+        <text x="732" y="38" font-size="13" fill="#9fb2c2">repo</text>
+      </g>
+      <g>
+        <circle cx="708" cy="71" r="15" fill="#12283a" stroke="#4a7bb0" stroke-width="2.2"/>
+        <text x="732" y="75" font-size="13" fill="#9fb2c2">repo</text>
+      </g>
+      <g>
+        <circle cx="708" cy="108" r="15" fill="#12283a" stroke="#4a7bb0" stroke-width="2.2"/>
+        <text x="732" y="112" font-size="13" fill="#9fb2c2">repo</text>
+      </g>
+      <g>
+        <circle cx="708" cy="145" r="15" fill="#12283a" stroke="#4a7bb0" stroke-width="2.2"/>
+        <text x="732" y="149" font-size="13" fill="#9fb2c2">repo</text>
+      </g>
+    </g>
+
+    <!-- caption: each repo adds a 3-line caller -->
+    <text x="430" y="170" text-anchor="middle" font-size="11.5" fill="#6f8496">each repo adds a 3-line caller, the logic lives here</text>
+  </g>
+</svg>
