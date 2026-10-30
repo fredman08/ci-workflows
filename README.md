@@ -75,5 +75,5 @@ Copy the caller(s) you want into that repo's `.github/workflows/`, commit, open 
 - **Required checks:** only `verify` is required on `main`. A lint/security job blocks merges only if it has `soft-fail: false` **and** is added as a required status check in that repo's branch protection.
 - **Versions:** Dependabot (7-day cooldown) keeps SHA-pinned Action versions current; the Semgrep image is pinned in `semgrep.yml` and bumped by hand.
 - **License:** MIT. Security reports: see [SECURITY.md](SECURITY.md).
-- `config: "auto"` is the convenient default; switch to `p/default` if you prefer a fixed, registry-pinned ruleset with no auto-selection.
+- `config: "auto"` is the convenient default; switch to `p/default` if you prefer a fixed ruleset with no auto-selection (registry rules still update over time).
 - The banner/fan-out graphics animate on GitHub and in browsers; some non-browser markdown viewers show the first frame statically.
