@@ -52,25 +52,24 @@ change in every repo.
 
 ## Just want the gates? (no clone needed)
 
-Copy `templates/security.yml` and/or `templates/lint.yml` into your repo's `.github/workflows/`. They call `fredman08/ci-workflows@v1` on GitHub; the checks run on GitHub's runners, so nothing needs installing locally.
+Copy the callers from `templates/` into your repo as described in [Per repo that needs the gates](#per-repo-that-needs-the-gates). They call `fredman08/ci-workflows@v1` on GitHub and run on GitHub's runners, so nothing needs installing locally.
 
 ## Running your own copy (fork or clone)
 
 Cloning alone does nothing — the callers point at GitHub, not your disk. To run your own copy:
 
-1. Replace `fredman08` with your GitHub username in `templates/` and this README.
-2. Push to your account as a **public** repo (needed for org-owned callers).
-3. Create the tag the callers pin to: `git tag v1 && git push origin v1`.
+1. Replace `fredman08` with your GitHub username in `templates/`, `README.md` and `SECURITY.md` (and `LICENSE` if you want your name there).
+2. Follow One-time setup steps 1 and 3 above: public repo, then the `v1` tag (`git tag v1 && git push origin v1`), plus CodeRabbit if you want it.
+3. If you forked, enable workflows in the fork's **Actions** tab (forks run none by default).
 4. Add a `BLOCKED_PATTERNS` repo secret (an ERE alternation of words that must never be committed), or `verify.yml` fails. Never commit its value.
-5. Optional: install the CodeRabbit app (see setup step 3).
 
 ## Optional: local commit-guard hooks
 
-`.githooks/` blocks restricted identifiers and secrets before you commit. A fresh clone has them **off** until you opt in:
+`.githooks/` (pre-commit, pre-push, commit-msg, tag) blocks restricted identifiers and secrets. A fresh clone has them **off** until you opt in:
 
-- Needs **git + bash** (on Windows: Git for Windows) and **gitleaks** (`winget install Gitleaks.Gitleaks`) — pre-commit refuses every commit without it.
-- Copy `.githooks/.blocked.example` to `.githooks/.blocked` and add your own patterns (gitignored). Without it the identifier check is skipped with a warning.
-- Activate once per clone: `bash .githooks/setup-hooks.sh` (or `.githooks/setup-hooks.ps1` on Windows).
+- **Needs** git and `sh`/bash (on Windows, Git for Windows — even if you use the `.ps1` script) and **gitleaks** (`winget install Gitleaks.Gitleaks`). Pre-commit refuses every commit without gitleaks; the override is `CCMEM_ALLOW_NO_SCANNER=1 git commit ...`.
+- **Activate once per clone:** `bash .githooks/setup-hooks.sh` (Windows: `pwsh -File .githooks/setup-hooks.ps1`). It sets `core.hooksPath`, seeds a gitignored `.githooks/.blocked` from `.blocked.example`, and adds `git safetag`.
+- **Then edit `.githooks/.blocked`:** replace the placeholder lines with your own patterns (grep ERE). Check everything with `bash .githooks/test-hooks.sh`.
 
 ## Per repo that needs the gates
 
