@@ -55,7 +55,7 @@
       </g>
     </g>
 
-    <!-- caption: each repo adds a 3-line caller -->
-    <text x="430" y="170" text-anchor="middle" font-size="11.5" fill="#6f8496">each repo adds a 3-line caller, the logic lives here</text>
+    <!-- caption: each repo adds a small caller -->
+    <text x="430" y="170" text-anchor="middle" font-size="11.5" fill="#6f8496">each repo adds a small caller, the logic lives here</text>
   </g>
 </svg>
