@@ -50,6 +50,28 @@ change in every repo.
 2. **If you make it private** (personal repos only): repo **Settings → Actions → General → Access → "Accessible from repositories owned by 'fredman08' user" → Save**. Without this, a private reusable workflow is callable only from itself.
 3. **Install CodeRabbit** once: go to https://coderabbit.ai → "Login with GitHub" → install the **CodeRabbit GitHub App** → select **"All repositories"**. Done — every PR is reviewed automatically, no file required. Free tier covers private repos (rate limit ~4 reviews/hr — a non-issue solo).
 
+## Just want the gates? (no clone needed)
+
+Copy `templates/security.yml` and/or `templates/lint.yml` into your repo's `.github/workflows/`. They call `fredman08/ci-workflows@v1` on GitHub; the checks run on GitHub's runners, so nothing needs installing locally.
+
+## Running your own copy (fork or clone)
+
+Cloning alone does nothing — the callers point at GitHub, not your disk. To run your own copy:
+
+1. Replace `fredman08` with your GitHub username in `templates/` and this README.
+2. Push to your account as a **public** repo (needed for org-owned callers).
+3. Create the tag the callers pin to: `git tag v1 && git push origin v1`.
+4. Add a `BLOCKED_PATTERNS` repo secret (an ERE alternation of words that must never be committed), or `verify.yml` fails. Never commit its value.
+5. Optional: install the CodeRabbit app (see setup step 3).
+
+## Optional: local commit-guard hooks
+
+`.githooks/` blocks restricted identifiers and secrets before you commit. A fresh clone has them **off** until you opt in:
+
+- Needs **git + bash** (on Windows: Git for Windows) and **gitleaks** (`winget install Gitleaks.Gitleaks`) — pre-commit refuses every commit without it.
+- Copy `.githooks/.blocked.example` to `.githooks/.blocked` and add your own patterns (gitignored). Without it the identifier check is skipped with a warning.
+- Activate once per clone: `bash .githooks/setup-hooks.sh` (or `.githooks/setup-hooks.ps1` on Windows).
+
 ## Per repo that needs the gates
 
 > **Automated (author's local tooling, not included here):** `/new-project` and `setup-commit-guard.ps1` already deploy these callers (plus hooks, `verify.yml`, secret and branch protection) into every repo they harden. Copy by hand only for a repo outside that flow.
