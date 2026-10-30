@@ -8,6 +8,6 @@ on:
 
 jobs:
   lint:
-    uses: fredman08/ci-workflows/.github/workflows/lint.yml@main
+    uses: fredman08/ci-workflows/.github/workflows/lint.yml@v1
     with:
       soft-fail: true   # report-only by default; set false for a hard gate once the repo is clean
