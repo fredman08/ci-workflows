@@ -27,7 +27,7 @@ jobs:
           SEMGREP_CONFIGS: ${{ inputs.config }}
           SOFT_FAIL: ${{ inputs.soft-fail }}
         run: |
-          args=()
-          for c in $SEMGREP_CONFIGS; do args+=(--config "$c"); done
-          [ "$SOFT_FAIL" = "true" ] || args+=(--error)
-          semgrep scan "${args[@]}"
+          set --
+          for c in $SEMGREP_CONFIGS; do set -- "$@" --config "$c"; done
+          [ "$SOFT_FAIL" = "true" ] || set -- "$@" --error
+          semgrep scan "$@"
