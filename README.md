@@ -44,8 +44,8 @@ change in every repo.
 
 ## One-time setup
 
-1. **Create this repo**: push this folder to `fredman08/ci-workflows` (private is fine).
-2. **Enable cross-repo sharing** (only if private): repo **Settings → Actions → General → Access → "Accessible from repositories owned by 'fredman08' user" → Save**. Without this, a private reusable workflow is callable only from itself.
+1. **Create this repo**: push this folder to `fredman08/ci-workflows` and keep it **public**. Repos owned by an **organization** can only call a reusable workflow from a public repo; a private one is callable only by your personal repos.
+2. **If you make it private** (personal repos only): repo **Settings → Actions → General → Access → "Accessible from repositories owned by 'fredman08' user" → Save**. Without this, a private reusable workflow is callable only from itself.
 3. **Install CodeRabbit** once: go to https://coderabbit.ai → "Login with GitHub" → install the **CodeRabbit GitHub App** → select **"All repositories"**. Done — every PR is reviewed automatically, no file required. Free tier covers private repos (rate limit ~4 reviews/hr — a non-issue solo).
 
 ## Per repo that needs the gates
@@ -60,17 +60,20 @@ Copy the caller(s) you want into that repo's `.github/workflows/`, commit, open 
 | Lint | `templates/lint.yml` → `.github/workflows/lint.yml` | ruff and/or eslint+tsc on every PR + push to `main` |
 
 **Semgrep options** (in the caller's `with:`):
-- **Hard gate (default):** build **fails** on findings (`--error`).
+- **Hard gate (workflow default):** build **fails** on findings (`--error`). The **caller templates ship report-only** (`soft-fail: true`); set it to `false` for a hard gate.
 - **Warn-only:** `with: { soft-fail: true }`.
 - **Stricter rules:** `with: { config: "p/default p/security-audit" }`.
 
-**Lint options:** `with: { soft-fail: true }` to report issues without failing the build. The job auto-detects the stack — Python files → `ruff`; a `package.json` → `npm run lint` (if present) and `tsc --noEmit` when a `tsconfig.json` exists.
+**Lint options:** `with: { soft-fail: true }` to report issues without failing the build (default `false`; templates set `true`). Lint scans the whole repo, not just changed files. The job auto-detects the stack — Python files → `ruff`; a `package.json` → `npm run lint` (if present) and `tsc --noEmit` when a `tsconfig.json` exists.
 
 ## Notes
 
 - **Windows is irrelevant to CI** — Actions run on GitHub's `ubuntu-latest` runners.
 - **No Semgrep account/token needed** for OSS scanning. `SEMGREP_APP_TOKEN` is only for the paid managed platform (`semgrep ci`) — add it as a repo secret later if you ever adopt it.
 - **SARIF → GitHub code scanning** is free only on **public** repos (private needs paid GitHub Advanced Security), so this config gates via pass/fail + logs instead of the Security tab.
-- **Pin for stability:** reference a reusable workflow by a tag (`@v1`) instead of `@main` if you don't want to auto-adopt changes. Tag this repo `v1` after the first green run.
+- **Pinned by tag:** the templates call `@v1`, so pushes to `main` don't reach callers. Move the `v1` tag deliberately to roll out a change.
+- **Required checks:** only `verify` is required on `main`. A lint/security job blocks merges only if it has `soft-fail: false` **and** is added as a required status check in that repo's branch protection.
+- **Versions:** Dependabot keeps Action versions current; the Semgrep image is pinned in `semgrep.yml` and bumped by hand.
+- **License:** MIT. Security reports: see [SECURITY.md](SECURITY.md).
 - `config: "auto"` is the convenient default; switch to `p/default` if you prefer a fixed, registry-pinned ruleset with no auto-selection.
 - The banner/fan-out graphics animate on GitHub and in browsers; some non-browser markdown viewers show the first frame statically.
