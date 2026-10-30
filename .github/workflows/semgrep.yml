@@ -19,8 +19,15 @@ jobs:
     name: scan
     runs-on: ubuntu-latest
     container:
-      image: semgrep/semgrep
+      image: semgrep/semgrep:1.183.0
     steps:
       - uses: actions/checkout@v4
       - name: Semgrep scan
-        run: semgrep scan --config "${{ inputs.config }}" ${{ inputs.soft-fail && ' ' || '--error' }}
+        env:
+          SEMGREP_CONFIGS: ${{ inputs.config }}
+          SOFT_FAIL: ${{ inputs.soft-fail }}
+        run: |
+          args=()
+          for c in $SEMGREP_CONFIGS; do args+=(--config "$c"); done
+          [ "$SOFT_FAIL" = "true" ] || args+=(--error)
+          semgrep scan "${args[@]}"

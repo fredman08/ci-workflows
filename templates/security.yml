@@ -9,7 +9,7 @@ on:
 
 jobs:
   semgrep:
-    uses: fredman08/ci-workflows/.github/workflows/semgrep.yml@main
+    uses: fredman08/ci-workflows/.github/workflows/semgrep.yml@v1
     with:
       soft-fail: true   # report-only by default; set false for a hard gate once the repo is clean
     # Optional:

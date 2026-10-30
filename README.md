@@ -50,6 +50,8 @@ change in every repo.
 
 ## Per repo that needs the gates
 
+> **Automated:** `/new-project` and `setup-commit-guard.ps1` already deploy these callers (plus hooks, `verify.yml`, secret and branch protection) into every repo they harden. Copy by hand only for a repo outside that flow.
+
 Copy the caller(s) you want into that repo's `.github/workflows/`, commit, open a PR:
 
 | Gate | Copy this | Runs |
