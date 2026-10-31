@@ -32,9 +32,9 @@ fi
 git config alias.safetag '!sh .githooks/tag' 2>/dev/null && \
     printf "Alias 'git safetag <name>' installed (early tag-identity check).\n"
 
-# 4. Warn if the secret scanner is not installed (the hook degrades to a warning).
+# 4. Warn if the secret scanner is not installed (pre-commit fails closed without it).
 if ! command -v gitleaks >/dev/null 2>&1; then
-    printf 'NOTE: gitleaks not on PATH — secret scanning will be skipped by pre-commit.\n'
+    printf 'NOTE: gitleaks not on PATH — pre-commit will REFUSE every commit until it is installed.\n'
     printf '  Install: winget install Gitleaks.Gitleaks\n'
 fi
 

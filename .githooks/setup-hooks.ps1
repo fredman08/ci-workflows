@@ -34,9 +34,9 @@ if (Test-Path $blocked) {
 git config alias.safetag '!sh .githooks/tag' 2>$null
 Write-Host "Alias 'git safetag <name>' installed (early tag-identity check)."
 
-# 4. Warn if the secret scanner is missing (pre-commit degrades to a warning).
+# 4. Warn if the secret scanner is missing (pre-commit fails closed without it).
 if (-not (Get-Command gitleaks -ErrorAction SilentlyContinue)) {
-    Write-Host 'NOTE: gitleaks not on PATH — secret scanning will be skipped by pre-commit.'
+    Write-Host 'NOTE: gitleaks not on PATH — pre-commit will REFUSE every commit until it is installed.'
     Write-Host '  Install: winget install Gitleaks.Gitleaks'
 }
 
