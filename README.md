@@ -67,7 +67,7 @@ Cloning alone does nothing — the callers point at GitHub, not your disk. To ru
 
 `.githooks/` (pre-commit, pre-push, commit-msg, tag) blocks restricted identifiers and secrets. A fresh clone has them **off** until you opt in:
 
-- **Needs** git and `sh`/bash (on Windows, Git for Windows — even if you use the `.ps1` script) and **gitleaks** (`winget install Gitleaks.Gitleaks`). Pre-commit refuses every commit without gitleaks; the override is `CCMEM_ALLOW_NO_SCANNER=1 git commit ...`.
+- **Needs** git and `sh`/bash (on Windows, Git for Windows — even if you use the `.ps1` script) and **gitleaks** (`winget install Gitleaks.Gitleaks`). Pre-commit refuses every commit without gitleaks; the override is `ALLOW_NO_SCANNER=1 git commit ...`.
 - **Activate once per clone:** `bash .githooks/setup-hooks.sh` (Windows: `pwsh -File .githooks/setup-hooks.ps1`). It sets `core.hooksPath`, seeds a gitignored `.githooks/.blocked` from `.blocked.example`, and adds `git safetag`.
 - **Then edit `.githooks/.blocked`:** replace the placeholder lines with your own patterns (grep ERE). Check everything with `bash .githooks/test-hooks.sh`.
 
