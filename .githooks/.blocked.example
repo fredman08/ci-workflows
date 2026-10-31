@@ -1,4 +1,4 @@
-# Restricted-identifier block list — one grep BRE pattern per line.
+# Restricted-identifier block list — one grep ERE pattern per line.
 # Copy this file to .githooks/.blocked and replace the labels with real values.
 # .blocked is gitignored and never pushed; these hooks reveal nothing on their own.
 #

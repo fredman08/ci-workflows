@@ -50,6 +50,27 @@ change in every repo.
 2. **If you make it private** (personal repos only): repo **Settings → Actions → General → Access → "Accessible from repositories owned by 'fredman08' user" → Save**. Without this, a private reusable workflow is callable only from itself.
 3. **Install CodeRabbit** once: go to https://coderabbit.ai → "Login with GitHub" → install the **CodeRabbit GitHub App** → select **"All repositories"**. Done — every PR is reviewed automatically, no file required. Free tier covers private repos (rate limit ~4 reviews/hr — a non-issue solo).
 
+## Just want the gates? (no clone needed)
+
+Copy the callers from `templates/` into your repo as described in [Per repo that needs the gates](#per-repo-that-needs-the-gates). They call `fredman08/ci-workflows@v1` on GitHub and run on GitHub's runners, so nothing needs installing locally.
+
+## Running your own copy (fork or clone)
+
+Cloning alone does nothing — the callers point at GitHub, not your disk. To run your own copy:
+
+1. Replace `fredman08` with your GitHub username in `templates/`, `README.md` and `SECURITY.md` (and `LICENSE` if you want your name there).
+2. Follow One-time setup steps 1 and 3 above: public repo, then the `v1` tag (`git tag v1 && git push origin v1`), plus CodeRabbit if you want it.
+3. If you forked, enable workflows in the fork's **Actions** tab (forks run none by default).
+4. Add a `BLOCKED_PATTERNS` repo secret (an ERE alternation of words that must never be committed), or `verify.yml` fails. Never commit its value.
+
+## Optional: local commit-guard hooks
+
+`.githooks/` (pre-commit, pre-push, commit-msg, tag) blocks restricted identifiers and secrets. A fresh clone has them **off** until you opt in:
+
+- **Needs** git and `sh`/bash (on Windows, Git for Windows — even if you use the `.ps1` script) and **gitleaks** (`winget install Gitleaks.Gitleaks`). Pre-commit refuses every commit without gitleaks; the override is `CCMEM_ALLOW_NO_SCANNER=1 git commit ...`.
+- **Activate once per clone:** `bash .githooks/setup-hooks.sh` (Windows: `pwsh -File .githooks/setup-hooks.ps1`). It sets `core.hooksPath`, seeds a gitignored `.githooks/.blocked` from `.blocked.example`, and adds `git safetag`.
+- **Then edit `.githooks/.blocked`:** replace the placeholder lines with your own patterns (grep ERE). Check everything with `bash .githooks/test-hooks.sh`.
+
 ## Per repo that needs the gates
 
 > **Automated (author's local tooling, not included here):** `/new-project` and `setup-commit-guard.ps1` already deploy these callers (plus hooks, `verify.yml`, secret and branch protection) into every repo they harden. Copy by hand only for a repo outside that flow.
